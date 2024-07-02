@@ -1,0 +1,42 @@
+<form [formGroup]="todoFormGroup" (submit)="addTodo()" class="mb-4 p-3 rounded bg-light form-group">
+  <label for="descriptionText">Description</label>
+  <input type="text"
+         class="form-control"
+         id="descriptionText"
+         placeholder="Task description"
+         autofocus
+         (keyup.enter)="addTodo()"
+         [formControl]="todoFormGroup.controls.todoDescription">
+  <button
+    class="mt-4 btn btn-primary"
+    type="submit"
+    [disabled]="!todoFormGroup.valid">
+    Add Task
+  </button>
+</form>
+
+<div class="list-group bg-light">
+  @for (task of todoService.todoSig(); track $index) {
+    @if (!task.isCompleted) {
+      <app-task-list-item
+        [task]="task">
+      </app-task-list-item>
+    }
+  } @empty {
+    <p class="text-center pt-2">No tasks available!</p>
+  }
+</div>
+
+@if (isClosedTodosSectionVisible) {
+  <div class="list-group bg-light mt-4">
+    @for (task of todoService.todoSig(); track $index) {
+      @if (task.isCompleted) {
+        <app-task-list-item
+          [task]="task">
+        </app-task-list-item>
+      }
+    } @empty {
+      <p class="text-center pt-2">No closed Tasks!</p>
+    }
+  </div>
+}
